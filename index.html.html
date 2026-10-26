@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shaminket — Calculadora Académica y Matemática</title>
+  <style>
+    :root {
+      --bg-page: #F7F7F5;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #F1F1EE;
+      --border-main: #D8D8D2;
+      --border-strong: #1C1C1A;
+      --text-primary: #141413;
+      --text-secondary: #5C5C57;
+      --text-muted: #8E8E88;
+      --accent: #141413;
+      --status-ok-bg: #EBF5EE;
+      --status-ok-border: #B7DEC2;
+      --status-ok-text: #1B5E32;
+      --status-warn-bg: #FEF6E7;
+      --status-warn-border: #F2D29B;
+      --status-warn-text: #8A5300;
+      --status-err-bg: #FDECEC;
+      --status-err-border: #F5BABA;
+      --status-err-text: #9E1C1C;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 48px;
+    }
+
+    /* Header */
+    .site-header {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-main);
+      padding: 20px 24px;
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+
+    .brand-tag {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      border-left: 1px solid var(--border-main);
+      padding-left: 12px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Navigation / View Switcher */
+    .nav-bar {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-main);
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+    }
+
+    .nav-tab {
+      appearance: none;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 12px 16px;
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-tab:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-subtle);
+    }
+
+    .nav-tab.active {
+      color: var(--text-primary);
+      border-bottom-color: var(--border-strong);
+    }
+
+    /* Layout Container */
+    .main-container {
+      max-width: 1120px;
+      margin: 28px auto 0;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Section Card (Strictly 2D, no shadows, flat borders) */
+    .module-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-main);
+      padding: 24px;
+    }
+
+    .module-card.hidden {
+      display: none;
+    }
+
+    .module-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-main);
+      margin-bottom: 20px;
+    }
+
+    .module-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .module-step {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .module-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .module-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .module-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Buttons (2D Flat) */
+    .btn {
+      appearance: none;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-main);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      line-height: 1.2;
+    }
+
+    .btn:hover {
+      border-color: var(--border-strong);
+      background-color: var(--bg-subtle);
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      border-color: var(--accent);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background-color: #333330;
+      border-color: #333330;
+    }
+
+    .btn-icon {
+      padding: 8px 10px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+    }
+
+    .btn-icon:hover {
+      color: var(--status-err-text);
+      border-color: var(--status-err-border);
+      background-color: var(--status-err-bg);
+    }
+
+    /* Inputs & Labels */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .input-control {
+      width: 100%;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-main);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      padding: 9px 12px;
+      outline: none;
+      border-radius: 0;
+    }
+
+    .input-control.mono {
+      font-family: var(--font-mono);
+    }
+
+    .input-control::placeholder {
+      color: var(--text-muted);
+      opacity: 1;
+    }
+
+    .input-control:focus {
+      border-color: var(--border-strong);
+      background-color: #FAFAFA;
+    }
+
+    .input-control.input-error {
+      border-color: var(--status-err-text);
+      background-color: var(--status-err-bg);
+    }
+
+    /* Formula Note */
+    .formula-bar {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-main);
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    /* Single Calculation Grid */
+    .single-calc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    /* Results Display Boxes */
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .result-box {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-main);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .result-box.highlight {
+      border-color: var(--border-strong);
+      background-color: var(--bg-surface);
+    }
+
+    .result-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .result-value {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      word-break: break-all;
+    }
+
+    .result-value.empty {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .result-sub {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      min-height: 1.25em;
+    }
+
+    /* Validation Notice */
+    .validation-msg {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--status-err-border);
+      background-color: var(--status-err-bg);
+      color: var(--status-err-text);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      display: none;
+    }
+
+    .validation-msg.visible {
+      display: block;
+    }
+
+    .status-banner {
+      margin-top: 16px;
+      padding: 10px 14px;
+      border: 1px solid var(--border-main);
+      background-color: var(--bg-subtle);
+      color: var(--text-secondary);
+      font-size: 0.8125rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .status-banner.status-ok {
+      background-color: var(--status-ok-bg);
+      border-color: var(--status-ok-border);
+      color: var(--status-ok-text);
+    }
+
+    .status-banner.status-warn {
+      background-color: var(--status-warn-bg);
+      border-color: var(--status-warn-border);
+      color: var(--status-warn-text);
+    }
+
+    /* Evaluations Table / List */
+    .config-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      padding: 16px;
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-main);
+      margin-bottom: 20px;
+    }
+
+    .eval-list-header {
+      display: grid;
+      grid-template-columns: 2fr 1.1fr 1.1fr 1.1fr 1.1fr 1.1fr 44px;
+      gap: 10px;
+      padding: 8px 12px;
+      border-top: 1px solid var(--border-main);
+      border-bottom: 1px solid var(--border-main);
+      background-color: var(--bg-subtle);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .eval-rows-container {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid var(--border-main);
+      margin-bottom: 20px;
+    }
+
+    .eval-row {
+      display: grid;
+      grid-template-columns: 2fr 1.1fr 1.1fr 1.1fr 1.1fr 1.1fr 44px;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid var(--border-main);
+      align-items: center;
+      background-color: var(--bg-surface);
+    }
+
+    .eval-row:last-child {
+      border-bottom: none;
+    }
+
+    .eval-cell-output {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-main);
+      padding: 9px 10px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      text-align: right;
+      min-height: 39px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .eval-cell-output.empty {
+      color: var(--text-muted);
+    }
+
+    .eval-row-error {
+      grid-column: 1 / -1;
+      font-size: 0.75rem;
+      color: var(--status-err-text);
+      background-color: var(--status-err-bg);
+      border: 1px solid var(--status-err-border);
+      padding: 6px 10px;
+      display: none;
+    }
+
+    .eval-row-error.visible {
+      display: block;
+    }
+
+    .mobile-label {
+      display: none;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    /* Averages List */
+    .grades-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .grade-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 12px;
+      border: 1px solid var(--border-main);
+      background-color: var(--bg-surface);
+    }
+
+    .grade-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .grade-index {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    /* Rule of Three Layout */
+    .ro3-container {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .ro3-pair {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid var(--border-main);
+      background-color: var(--bg-subtle);
+    }
+
+    .ro3-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      padding: 0 4px;
+    }
+
+    .ro3-output-field {
+      width: 100%;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 8px 12px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .ro3-output-field.empty {
+      color: var(--text-muted);
+      font-weight: 400;
+      border-color: var(--border-main);
+    }
+
+    /* Footer */
+    .site-footer {
+      max-width: 1120px;
+      margin: 40px auto 0;
+      padding: 20px 24px 0;
+      border-top: 1px solid var(--border-main);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 860px) {
+      .single-calc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .eval-list-header {
+        display: none;
+      }
+
+      .eval-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 16px;
+      }
+
+      .eval-row .cell-name {
+        grid-column: 1 / -1;
+      }
+
+      .eval-row .cell-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .mobile-label {
+        display: block;
+      }
+
+      .ro3-container {
+        grid-template-columns: 1fr;
+      }
+
+      .ro3-connector {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-name">SHAMINKET</span>
+        <span class="brand-tag">Calculadora Académica y Matemática</span>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="btn-reset-all" class="btn">Borrar todos los datos</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav-bar" aria-label="Vistas de calculadora">
+    <div class="nav-inner">
+      <button type="button" class="nav-tab active" data-view="all">Vista completa</button>
+      <button type="button" class="nav-tab" data-view="sec-aportacion">1. Aportación individual</button>
+      <button type="button" class="nav-tab" data-view="sec-evaluaciones">2. Calculadora de evaluaciones</button>
+      <button type="button" class="nav-tab" data-view="sec-promedios">3. Promedios</button>
+      <button type="button" class="nav-tab" data-view="sec-regla3">4. Regla de tres</button>
+    </div>
+  </nav>
+
+  <main class="main-container">
+
+    <!-- 1. APORTACIÓN INDIVIDUAL DE UNA EVALUACIÓN -->
+    <section id="sec-aportacion" class="module-card">
+      <div class="module-header">
+        <div class="module-title-group">
+          <span class="module-step">Módulo 01</span>
+          <h2 class="module-title">Aportación de una Calificación al Porcentaje Total</h2>
+          <p class="module-desc">Calcula cuánto aporta una evaluación individual al porcentaje final de una materia.</p>
+        </div>
+        <div class="module-controls">
+          <button type="button" id="btn-clear-single" class="btn">Limpiar sección</button>
+        </div>
+      </div>
+
+      <div class="formula-bar">
+        <span>Fórmula: (Calificación obtenida / Calificación máxima) × Porcentaje asignado</span>
+        <span>Cálculo instantáneo</span>
+      </div>
+
+      <div class="single-calc-grid">
+        <div class="field-group">
+          <label class="field-label" for="single-obtained">Calificación obtenida</label>
+          <input type="number" id="single-obtained" class="input-control mono" step="any" placeholder="Ej. 5" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="single-max">Calificación máxima posible</label>
+          <input type="number" id="single-max" class="input-control mono" step="any" placeholder="Ej. 10" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="single-weight">Porcentaje de la evaluación (%)</label>
+          <input type="number" id="single-weight" class="input-control mono" step="any" placeholder="Ej. 30" />
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-box highlight">
+          <span class="result-label">Aportación a la calificación final</span>
+          <div id="single-res-contribution" class="result-value empty">—</div>
+          <div id="single-res-summary" class="result-sub">Introduce los tres valores para calcular.</div>
+        </div>
+        <div class="result-box">
+          <span class="result-label">Rendimiento en la evaluación</span>
+          <div id="single-res-ratio" class="result-value empty">—</div>
+          <div class="result-sub">Equivalente porcentual sobre la nota máxima</div>
+        </div>
+        <div class="result-box">
+          <span class="result-label">Puntos porcentuales no obtenidos</span>
+          <div id="single-res-lost" class="result-value empty">—</div>
+          <div class="result-sub">Diferencia respecto al porcentaje asignado</div>
+        </div>
+      </div>
+
+      <div id="single-validation" class="validation-msg" role="alert"></div>
+    </section>
+
+    <!-- 2. CALCULADORA DE EVALUACIONES DINÁMICAS -->
+    <section id="sec-evaluaciones" class="module-card">
+      <div class="module-header">
+        <div class="module-title-group">
+          <span class="module-step">Módulo 02</span>
+          <h2 class="module-title">Calculadora de Evaluaciones de la Materia</h2>
+          <p class="module-desc">Agrega o elimina evaluaciones dinámicamente, define su peso y consulta el acumulado total.</p>
+        </div>
+        <div class="module-controls">
+          <button type="button" id="btn-add-eval" class="btn btn-primary">+ Agregar evaluación</button>
+          <button type="button" id="btn-clear-evals" class="btn">Vaciar evaluaciones</button>
+        </div>
+      </div>
+
+      <div class="config-bar">
+        <div class="field-group">
+          <label class="field-label" for="eval-count-input">Cantidad de evaluaciones a calcular</label>
+          <input type="number" id="eval-count-input" class="input-control mono" min="1" max="50" step="1" placeholder="Ej. 3" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="eval-target-weight">Porcentaje total de referencia (%)</label>
+          <input type="number" id="eval-target-weight" class="input-control mono" step="any" placeholder="Ej. 100" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="eval-final-scale">Escala de calificación final (opcional)</label>
+          <input type="number" id="eval-final-scale" class="input-control mono" step="any" placeholder="Ej. 10 o 100" />
+        </div>
+      </div>
+
+      <div class="eval-list-header">
+        <div>Evaluación</div>
+        <div>Calif. obtenida</div>
+        <div>Calif. máxima</div>
+        <div>% Asignado</div>
+        <div style="text-align: right;">% Obtenido</div>
+        <div style="text-align: right;">Aportación final</div>
+        <div style="text-align: center;">Quitar</div>
+      </div>
+
+      <div id="eval-rows-container" class="eval-rows-container"></div>
+
+      <div class="result-grid">
+        <div class="result-box highlight">
+          <span class="result-label">Porcentaje acumulado obtenido</span>
+          <div id="eval-total-obtained" class="result-value empty">—</div>
+          <div id="eval-total-obtained-sub" class="result-sub">Suma de aportaciones calculadas</div>
+        </div>
+        <div class="result-box">
+          <span class="result-label">Porcentaje total asignado</span>
+          <div id="eval-total-assigned" class="result-value empty">—</div>
+          <div id="eval-total-assigned-sub" class="result-sub">Suma de porcentajes asignados</div>
+        </div>
+        <div class="result-box">
+          <span class="result-label">Equivalente en escala final</span>
+          <div id="eval-scale-result" class="result-value empty">—</div>
+          <div id="eval-scale-sub" class="result-sub">Respecto al porcentaje de referencia</div>
+        </div>
+      </div>
+
+      <div id="eval-weight-banner" class="status-banner" style="display: none;">
+        <span id="eval-weight-banner-text"></span>
+      </div>
+    </section>
+
+    <!-- 3. PROMEDIOS -->
+    <section id="sec-promedios" class="module-card">
+      <div class="module-header">
+        <div class="module-title-group">
+          <span class="module-step">Módulo 03</span>
+          <h2 class="module-title">Calculadora de Promedios</h2>
+          <p class="module-desc">Calcula el promedio aritmético de varias calificaciones, su porcentaje equivalente y su conversión a otra escala.</p>
+        </div>
+        <div class="module-controls">
+          <button type="button" id="btn-add-grade" class="btn btn-primary">+ Agregar calificación</button>
+          <button type="button" id="btn-clear-grades" class="btn">Vaciar promedios</button>
+        </div>
+      </div>
+
+      <div class="config-bar">
+        <div class="field-group">
+          <label class="field-label" for="avg-count-input">Cantidad de calificaciones</label>
+          <input type="number" id="avg-count-input" class="input-control mono" min="1" max="50" step="1" placeholder="Ej. 4" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="avg-max-scale">Escala máxima de las calificaciones</label>
+          <input type="number" id="avg-max-scale" class="input-control mono" step="any" placeholder="Ej. 10" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="avg-target-scale">Escala configurable de destino</label>
+          <input type="number" id="avg-target-scale" class="input-control mono" step="any" placeholder="Ej. 100" />
+        </div>
+      </div>
+
+      <div id="grades-list" class="grades-list"></div>
+
+      <div class="result-grid">
+        <div class="result-box highlight">
+          <span class="result-label">Promedio obtenido</span>
+          <div id="avg-res-mean" class="result-value empty">—</div>
+          <div id="avg-res-count" class="result-sub">Introduce al menos una calificación.</div>
+        </div>
+        <div class="result-box">
+          <span class="result-label">Porcentaje equivalente</span>
+          <div id="avg-res-percent" class="result-value empty">—</div>
+          <div id="avg-res-percent-sub" class="result-sub">Requiere definir la escala máxima</div>
+        </div>
+        <div class="result-box">
+          <span class="result-label">Resultado en escala configurable</span>
+          <div id="avg-res-scaled" class="result-value empty">—</div>
+          <div id="avg-res-scaled-sub" class="result-sub">Requiere escala máxima y escala destino</div>
+        </div>
+      </div>
+
+      <div id="avg-validation" class="validation-msg" role="alert"></div>
+    </section>
+
+    <!-- 4. REGLA DE TRES SIMPLE DIRECTA -->
+    <section id="sec-regla3" class="module-card">
+      <div class="module-header">
+        <div class="module-title-group">
+          <span class="module-step">Módulo 04</span>
+          <h2 class="module-title">Calculadora de Regla de Tres Simple Directa</h2>
+          <p class="module-desc">Si A corresponde a B, entonces C corresponde a X.</p>
+        </div>
+        <div class="module-controls">
+          <button type="button" id="btn-clear-ro3" class="btn">Limpiar regla de tres</button>
+        </div>
+      </div>
+
+      <div class="formula-bar">
+        <span>Fórmula: X = (B × C) / A</span>
+        <span>Proporcionalidad directa</span>
+      </div>
+
+      <div class="ro3-container">
+        <div class="ro3-pair">
+          <div class="field-group">
+            <label class="field-label" for="ro3-a">Valor A (Referencia inicial)</label>
+            <input type="number" id="ro3-a" class="input-control mono" step="any" placeholder="Ej. 10" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="ro3-c">Valor C (Nuevo valor conocido)</label>
+            <input type="number" id="ro3-c" class="input-control mono" step="any" placeholder="Ej. 7.5" />
+          </div>
+        </div>
+
+        <div class="ro3-connector" aria-hidden="true">
+          <span>corresponde a &rarr;</span>
+          <span>corresponde a &rarr;</span>
+        </div>
+
+        <div class="ro3-pair">
+          <div class="field-group">
+            <label class="field-label" for="ro3-b">Valor B (Equivalencia de A)</label>
+            <input type="number" id="ro3-b" class="input-control mono" step="any" placeholder="Ej. 100" />
+          </div>
+          <div class="field-group">
+            <span class="field-label">Incógnita X (Resultado calculado)</span>
+            <div id="ro3-x-inline" class="ro3-output-field empty">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-box highlight">
+          <span class="result-label">Valor de X</span>
+          <div id="ro3-res-x" class="result-value empty">—</div>
+          <div id="ro3-res-formula" class="result-sub">Introduce los valores A, B y C para obtener X.</div>
+        </div>
+        <div class="result-box">
+          <span class="result-label">Factor de proporción (B / A)</span>
+          <div id="ro3-res-factor" class="result-value empty">—</div>
+          <div class="result-sub">Constante de proporcionalidad directa</div>
+        </div>
+      </div>
+
+      <div id="ro3-validation" class="validation-msg" role="alert"></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>SHAMINKET — Herramienta de Cálculo Académico</span>
+    <span>Diseño 2D Minimalista · Precisión en tiempo real</span>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* ==========================================
+         UTILIDADES MATEMÁTICAS Y DE FORMATO
+         ========================================== */
+      function parseInputNumber(raw) {
+        if (raw === null || raw === undefined) return null;
+        var trimmed = String(raw).trim();
+        if (trimmed === "") return null;
+        var normalized = trimmed.replace(",", ".");
+        var num = Number(normalized);
+        return Number.isFinite(num) ? num : null;
+      }
+
+      function formatNumber(val, maxDecimals) {
+        if (val === null || val === undefined || !Number.isFinite(val)) return "—";
+        var dec = typeof maxDecimals === "number" ? maxDecimals : 2;
+        var factor = Math.pow(10, dec);
+        var rounded = Math.round((val + Number.EPSILON) * factor) / factor;
+        if (Object.is(rounded, -0)) rounded = 0;
+        return rounded.toString();
+      }
+
+      /* ==========================================
+         NAVEGACIÓN DE VISTAS
+         ========================================== */
+      var navTabs = document.querySelectorAll(".nav-tab");
+      var moduleSections = document.querySelectorAll(".module-card");
+
+      navTabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          var targetView = tab.getAttribute("data-view");
+          navTabs.forEach(function (t) {
+            t.classList.remove("active");
+          });
+          tab.classList.add("active");
+
+          moduleSections.forEach(function (sec) {
+            if (targetView === "all" || sec.id === targetView) {
+              sec.classList.remove("hidden");
+            } else {
+              sec.classList.add("hidden");
+            }
+          });
+        });
+      });
+
+      /* ==========================================
+         1. APORTACIÓN INDIVIDUAL
+         ========================================== */
+      var singleObtainedInput = document.getElementById("single-obtained");
+      var singleMaxInput = document.getElementById("single-max");
+      var singleWeightInput = document.getElementById("single-weight");
+
+      var singleResContribution = document.getElementById("single-res-contribution");
+      var singleResSummary = document.getElementById("single-res-summary");
+      var singleResRatio = document.getElementById("single-res-ratio");
+      var singleResLost = document.getElementById("single-res-lost");
+      var singleValidation = document.getElementById("single-validation");
+      var btnClearSingle = document.getElementById("btn-clear-single");
+
+      function updateSingleCalculator() {
+        var obtained = parseInputNumber(singleObtainedInput.value);
+        var max = parseInputNumber(singleMaxInput.value);
+        var weight = parseInputNumber(singleWeightInput.value);
+
+        singleObtainedInput.classList.remove("input-error");
+        singleMaxInput.classList.remove("input-error");
+        singleWeightInput.classList.remove("input-error");
+        singleValidation.classList.remove("visible");
+        singleValidation.textContent = "";
+
+        if (max !== null && max <= 0) {
+          singleMaxInput.classList.add("input-error");
+          singleValidation.textContent = "La calificación máxima debe ser mayor que cero.";
+          singleValidation.classList.add("visible");
+          setSingleEmpty();
+          return;
+        }
+
+        if (obtained !== null && obtained < 0) {
+          singleObtainedInput.classList.add("input-error");
+          singleValidation.textContent = "La calificación obtenida no puede ser negativa.";
+          singleValidation.classList.add("visible");
+          setSingleEmpty();
+          return;
+        }
+
+        if (weight !== null && weight < 0) {
+          singleWeightInput.classList.add("input-error");
+          singleValidation.textContent = "El porcentaje asignado no puede ser negativo.";
+          singleValidation.classList.add("visible");
+          setSingleEmpty();
+          return;
+        }
+
+        if (obtained !== null && max !== null) {
+          var ratioPct = (obtained / max) * 100;
+          singleResRatio.textContent = formatNumber(ratioPct, 2) + "%";
+          singleResRatio.classList.remove("empty");
+        } else {
+          singleResRatio.textContent = "—";
+          singleResRatio.classList.add("empty");
+        }
+
+        if (obtained === null || max === null || weight === null) {
+          singleResContribution.textContent = "—";
+          singleResContribution.classList.add("empty");
+          singleResLost.textContent = "—";
+          singleResLost.classList.add("empty");
+          singleResSummary.textContent = "Introduce los tres valores para calcular.";
+          return;
+        }
+
+        var contribution = (obtained / max) * weight;
+        var lost = weight - contribution;
+
+        singleResContribution.textContent = formatNumber(contribution, 2) + "%";
+        singleResContribution.classList.remove("empty");
+
+        singleResLost.textContent = formatNumber(lost, 2) + "%";
+        singleResLost.classList.remove("empty");
+
+        singleResSummary.textContent =
+          "Equivale al " +
+          formatNumber(contribution, 2) +
+          "% de la calificación final (de " +
+          formatNumber(weight, 2) +
+          "% posibles).";
+
+        if (obtained > max) {
+          singleValidation.textContent = "Nota: La calificación obtenida supera la calificación máxima definida (puntos extra).";
+          singleValidation.classList.add("visible");
+        }
+      }
+
+      function setSingleEmpty() {
+        singleResContribution.textContent = "—";
+        singleResContribution.classList.add("empty");
+        singleResRatio.textContent = "—";
+        singleResRatio.classList.add("empty");
+        singleResLost.textContent = "—";
+        singleResLost.classList.add("empty");
+        singleResSummary.textContent = "Corrige los datos para ver el resultado.";
+      }
+
+      function clearSingleCalculator() {
+        singleObtainedInput.value = "";
+        singleMaxInput.value = "";
+        singleWeightInput.value = "";
+        updateSingleCalculator();
+      }
+
+      singleObtainedInput.addEventListener("input", updateSingleCalculator);
+      singleMaxInput.addEventListener("input", updateSingleCalculator);
+      singleWeightInput.addEventListener("input", updateSingleCalculator);
+      btnClearSingle.addEventListener("click", clearSingleCalculator);
+
+      /* ==========================================
+         2. CALCULADORA DE EVALUACIONES DINÁMICAS
+         ========================================== */
+      var evalRowsContainer = document.getElementById("eval-rows-container");
+      var evalCountInput = document.getElementById("eval-count-input");
+      var evalTargetWeightInput = document.getElementById("eval-target-weight");
+      var evalFinalScaleInput = document.getElementById("eval-final-scale");
+
+      var evalTotalObtained = document.getElementById("eval-total-obtained");
+      var evalTotalObtainedSub = document.getElementById("eval-total-obtained-sub");
+      var evalTotalAssigned = document.getElementById("eval-total-assigned");
+      var evalTotalAssignedSub = document.getElementById("eval-total-assigned-sub");
+      var evalScaleResult = document.getElementById("eval-scale-result");
+      var evalScaleSub = document.getElementById("eval-scale-sub");
+      var evalWeightBanner = document.getElementById("eval-weight-banner");
+      var evalWeightBannerText = document.getElementById("eval-weight-banner-text");
+
+      var btnAddEval = document.getElementById("btn-add-eval");
+      var btnClearEvals = document.getElementById("btn-clear-evals");
+
+      var evaluationsState = [];
+      var evalIdCounter = 1;
+      var placeholderExamples = ["Ej. Examen parcial", "Ej. Tarea", "Ej. Proyecto final", "Ej. Laboratorio", "Ej. Exposición"];
+
+      function createEmptyEvalItem() {
+        return {
+          id: evalIdCounter++,
+          name: "",
+          obtained: "",
+          max: "",
+          weight: ""
+        };
+      }
+
+      function initEvaluations(count) {
+        evaluationsState = [];
+        for (var i = 0; i < count; i++) {
+          evaluationsState.push(createEmptyEvalItem());
+        }
+        renderEvaluationRows();
+        updateEvaluationsCalculation();
+      }
+
+      function renderEvaluationRows() {
+        evalRowsContainer.innerHTML = "";
+
+        evaluationsState.forEach(function (item, idx) {
+          var row = document.createElement("div");
+          row.className = "eval-row";
+          row.setAttribute("data-id", item.id);
+
+          var placeholderName = placeholderExamples[idx % placeholderExamples.length];
+
+          row.innerHTML =
+            '<div class="cell-name">' +
+              '<span class="mobile-label">Nombre de evaluación</span>' +
+              '<input type="text" class="input-control eval-input-name" placeholder="' + placeholderName + '" />' +
+            '</div>' +
+            '<div>' +
+              '<span class="mobile-label">Calif. obtenida</span>' +
+              '<input type="number" step="any" class="input-control mono eval-input-obtained" placeholder="Ej. 8.5" />' +
+            '</div>' +
+            '<div>' +
+              '<span class="mobile-label">Calif. máxima</span>' +
+              '<input type="number" step="any" class="input-control mono eval-input-max" placeholder="Ej. 10" />' +
+            '</div>' +
+            '<div>' +
+              '<span class="mobile-label">% Asignado</span>' +
+              '<input type="number" step="any" class="input-control mono eval-input-weight" placeholder="Ej. 30" />' +
+            '</div>' +
+            '<div>' +
+              '<span class="mobile-label">% Obtenido (Rendimiento)</span>' +
+              '<div class="eval-cell-output empty eval-out-ratio">—</div>' +
+            '</div>' +
+            '<div>' +
+              '<span class="mobile-label">Aportación final</span>' +
+              '<div class="eval-cell-output empty eval-out-contrib">—</div>' +
+            '</div>' +
+            '<div class="cell-actions">' +
+              '<button type="button" class="btn btn-icon eval-btn-remove" title="Eliminar evaluación" aria-label="Eliminar evaluación">&times;</button>' +
+            '</div>' +
+            '<div class="eval-row-error"></div>';
+
+          var nameInput = row.querySelector(".eval-input-name");
+          var obtainedInput = row.querySelector(".eval-input-obtained");
+          var maxInput = row.querySelector(".eval-input-max");
+          var weightInput = row.querySelector(".eval-input-weight");
+          var removeBtn = row.querySelector(".eval-btn-remove");
+
+          nameInput.value = item.name;
+          obtainedInput.value = item.obtained;
+          maxInput.value = item.max;
+          weightInput.value = item.weight;
+
+          nameInput.addEventListener("input", function () {
+            item.name = nameInput.value;
+          });
+
+          obtainedInput.addEventListener("input", function () {
+            item.obtained = obtainedInput.value;
+            updateEvaluationsCalculation();
+          });
+
+          maxInput.addEventListener("input", function () {
+            item.max = maxInput.value;
+            updateEvaluationsCalculation();
+          });
+
+          weightInput.addEventListener("input", function () {
+            item.weight = weightInput.value;
+            updateEvaluationsCalculation();
+          });
+
+          removeBtn.addEventListener("click", function () {
+            if (evaluationsState.length <= 1) {
+              item.name = "";
+              item.obtained = "";
+              item.max = "";
+              item.weight = "";
+              renderEvaluationRows();
+              updateEvaluationsCalculation();
+              return;
+            }
+            evaluationsState = evaluationsState.filter(function (e) {
+              return e.id !== item.id;
+            });
+            if (evalCountInput.value.trim() !== "") {
+              evalCountInput.value = String(evaluationsState.length);
+            }
+            renderEvaluationRows();
+            updateEvaluationsCalculation();
+          });
+
+          evalRowsContainer.appendChild(row);
+        });
+      }
+
+      function updateEvaluationsCalculation() {
+        var rows = evalRowsContainer.querySelectorAll(".eval-row");
+        var totalAssigned = 0;
+        var hasAnyAssigned = false;
+        var totalContribution = 0;
+        var validContributionsCount = 0;
+
+        evaluationsState.forEach(function (item, index) {
+          var row = rows[index];
+          if (!row) return;
+
+          var obtainedInput = row.querySelector(".eval-input-obtained");
+          var maxInput = row.querySelector(".eval-input-max");
+          var weightInput = row.querySelector(".eval-input-weight");
+          var outRatio = row.querySelector(".eval-out-ratio");
+          var outContrib = row.querySelector(".eval-out-contrib");
+          var errBox = row.querySelector(".eval-row-error");
+
+          obtainedInput.classList.remove("input-error");
+          maxInput.classList.remove("input-error");
+          weightInput.classList.remove("input-error");
+          errBox.classList.remove("visible");
+          errBox.textContent = "";
+
+          var obtained = parseInputNumber(item.obtained);
+          var max = parseInputNumber(item.max);
+          var weight = parseInputNumber(item.weight);
+
+          if (weight !== null) {
+            if (weight < 0) {
+              weightInput.classList.add("input-error");
+              errBox.textContent = "El porcentaje asignado no puede ser negativo.";
+              errBox.classList.add("visible");
+            } else {
+              totalAssigned += weight;
+              hasAnyAssigned = true;
+            }
+          }
+
+          if (max !== null && max <= 0) {
+            maxInput.classList.add("input-error");
+            errBox.textContent = "La calificación máxima debe ser mayor que cero.";
+            errBox.classList.add("visible");
+            outRatio.textContent = "—";
+            outRatio.classList.add("empty");
+            outContrib.textContent = "—";
+            outContrib.classList.add("empty");
+            return;
+          }
+
+          if (obtained !== null && obtained < 0) {
+            obtainedInput.classList.add("input-error");
+            errBox.textContent = "La calificación obtenida no puede ser negativa.";
+            errBox.classList.add("visible");
+            outRatio.textContent = "—";
+            outRatio.classList.add("empty");
+            outContrib.textContent = "—";
+            outContrib.classList.add("empty");
+            return;
+          }
+
+          if (obtained !== null && max !== null && max > 0) {
+            var ratioPct = (obtained / max) * 100;
+            outRatio.textContent = formatNumber(ratioPct, 2) + "%";
+            outRatio.classList.remove("empty");
+          } else {
+            outRatio.textContent = "—";
+            outRatio.classList.add("empty");
+          }
+
+          if (obtained !== null && max !== null && max > 0 && weight !== null && weight >= 0) {
+            var contrib = (obtained / max) * weight;
+            outContrib.textContent = formatNumber(contrib, 2) + "%";
+            outContrib.classList.remove("empty");
+            totalContribution += contrib;
+            validContributionsCount++;
+          } else {
+            outContrib.textContent = "—";
+            outContrib.classList.add("empty");
+          }
+        });
+
+        // Actualizar Porcentaje Acumulado Obtenido
+        if (validContributionsCount > 0) {
+          evalTotalObtained.textContent = formatNumber(totalContribution, 2) + "%";
+          evalTotalObtained.classList.remove("empty");
+          evalTotalObtainedSub.textContent =
+            "Calculado a partir de " +
+            validContributionsCount +
+            (validContributionsCount === 1 ? " evaluación completa." : " evaluaciones completas.");
+        } else {
+          evalTotalObtained.textContent = "—";
+          evalTotalObtained.classList.add("empty");
+          evalTotalObtainedSub.textContent = "Completa al menos una evaluación para ver el acumulado.";
+        }
+
+        // Actualizar Porcentaje Total Asignado y Aviso Visual
+        var customTargetWeight = parseInputNumber(evalTargetWeightInput.value);
+        var referenceTotalWeight = customTargetWeight !== null && customTargetWeight > 0 ? customTargetWeight : 100;
+
+        if (hasAnyAssigned) {
+          evalTotalAssigned.textContent = formatNumber(totalAssigned, 2) + "%";
+          evalTotalAssigned.classList.remove("empty");
+          evalTotalAssignedSub.textContent = "Referencia configurada: " + formatNumber(referenceTotalWeight, 2) + "%";
+
+          evalWeightBanner.style.display = "flex";
+          evalWeightBanner.classList.remove("status-ok", "status-warn");
+
+          var diff = Math.round((totalAssigned - referenceTotalWeight) * 1000) / 1000;
+          if (Math.abs(diff) < 0.001) {
+            evalWeightBanner.classList.add("status-ok");
+            evalWeightBannerText.textContent =
+              "La suma de los porcentajes asignados coincide exactamente con el " +
+              formatNumber(referenceTotalWeight, 2) +
+              "% de referencia.";
+          } else if (diff < 0) {
+            evalWeightBanner.classList.add("status-warn");
+            evalWeightBannerText.textContent =
+              "Aviso: Los porcentajes asignados suman " +
+              formatNumber(totalAssigned, 2) +
+              "% (faltan " +
+              formatNumber(Math.abs(diff), 2) +
+              "% para alcanzar el " +
+              formatNumber(referenceTotalWeight, 2) +
+              "% de referencia). El cálculo se muestra normalmente.";
+          } else {
+            evalWeightBanner.classList.add("status-warn");
+            evalWeightBannerText.textContent =
+              "Aviso: Los porcentajes asignados suman " +
+              formatNumber(totalAssigned, 2) +
+              "% (superan por " +
+              formatNumber(diff, 2) +
+              "% el " +
+              formatNumber(referenceTotalWeight, 2) +
+              "% de referencia). El cálculo se muestra normalmente.";
+          }
+        } else {
+          evalTotalAssigned.textContent = "—";
+          evalTotalAssigned.classList.add("empty");
+          evalTotalAssignedSub.textContent = "Suma de porcentajes asignados";
+          evalWeightBanner.style.display = "none";
+        }
+
+        // Escala final opcional
+        var finalScale = parseInputNumber(evalFinalScaleInput.value);
+        if (validContributionsCount > 0 && finalScale !== null && finalScale > 0) {
+          var scaledScore = (totalContribution / referenceTotalWeight) * finalScale;
+          evalScaleResult.textContent = formatNumber(scaledScore, 2) + " / " + formatNumber(finalScale, 2);
+          evalScaleResult.classList.remove("empty");
+          evalScaleSub.textContent = "Basado en el " + formatNumber(referenceTotalWeight, 2) + "% de referencia";
+        } else if (validContributionsCount > 0) {
+          var overTen = (totalContribution / referenceTotalWeight) * 10;
+          evalScaleResult.textContent = formatNumber(overTen, 2) + " / 10";
+          evalScaleResult.classList.remove("empty");
+          evalScaleSub.textContent = "Equivalente sobre base 10 (personalizable arriba)";
+        } else {
+          evalScaleResult.textContent = "—";
+          evalScaleResult.classList.add("empty");
+          evalScaleSub.textContent = "Respecto al porcentaje de referencia";
+        }
+      }
+
+      btnAddEval.addEventListener("click", function () {
+        evaluationsState.push(createEmptyEvalItem());
+        if (evalCountInput.value.trim() !== "") {
+          evalCountInput.value = String(evaluationsState.length);
+        }
+        renderEvaluationRows();
+        updateEvaluationsCalculation();
+      });
+
+      evalCountInput.addEventListener("input", function () {
+        var desired = parseInputNumber(evalCountInput.value);
+        if (desired === null) return;
+        var count = Math.floor(desired);
+        if (count < 1) count = 1;
+        if (count > 50) count = 50;
+
+        while (evaluationsState.length < count) {
+          evaluationsState.push(createEmptyEvalItem());
+        }
+        while (evaluationsState.length > count) {
+          evaluationsState.pop();
+        }
+        renderEvaluationRows();
+        updateEvaluationsCalculation();
+      });
+
+      evalTargetWeightInput.addEventListener("input", updateEvaluationsCalculation);
+      evalFinalScaleInput.addEventListener("input", updateEvaluationsCalculation);
+
+      btnClearEvals.addEventListener("click", function () {
+        evalCountInput.value = "";
+        evalTargetWeightInput.value = "";
+        evalFinalScaleInput.value = "";
+        initEvaluations(3);
+      });
+
+      /* ==========================================
+         3. CALCULADORA DE PROMEDIOS
+         ========================================== */
+      var gradesListContainer = document.getElementById("grades-list");
+      var avgCountInput = document.getElementById("avg-count-input");
+      var avgMaxScaleInput = document.getElementById("avg-max-scale");
+      var avgTargetScaleInput = document.getElementById("avg-target-scale");
+
+      var avgResMean = document.getElementById("avg-res-mean");
+      var avgResCount = document.getElementById("avg-res-count");
+      var avgResPercent = document.getElementById("avg-res-percent");
+      var avgResPercentSub = document.getElementById("avg-res-percent-sub");
+      var avgResScaled = document.getElementById("avg-res-scaled");
+      var avgResScaledSub = document.getElementById("avg-res-scaled-sub");
+      var avgValidation = document.getElementById("avg-validation");
+
+      var btnAddGrade = document.getElementById("btn-add-grade");
+      var btnClearGrades = document.getElementById("btn-clear-grades");
+
+      var gradesState = [];
+      var gradeIdCounter = 1;
+
+      function createEmptyGradeItem() {
+        return {
+          id: gradeIdCounter++,
+          value: ""
+        };
+      }
+
+      function initGrades(count) {
+        gradesState = [];
+        for (var i = 0; i < count; i++) {
+          gradesState.push(createEmptyGradeItem());
+        }
+        renderGradesList();
+        updateAveragesCalculation();
+      }
+
+      function renderGradesList() {
+        gradesListContainer.innerHTML = "";
+
+        gradesState.forEach(function (item, idx) {
+          var card = document.createElement("div");
+          card.className = "grade-item";
+
+          card.innerHTML =
+            '<div class="grade-item-top">' +
+              '<label class="grade-index" for="grade-input-' + item.id + '">Calificación ' + (idx + 1) + '</label>' +
+              '<button type="button" class="btn btn-icon grade-btn-remove" title="Eliminar calificación" aria-label="Eliminar calificación">&times;</button>' +
+            '</div>' +
+            '<input type="number" step="any" id="grade-input-' + item.id + '" class="input-control mono grade-input-val" placeholder="Ej. 8.5" />';
+
+          var inputEl = card.querySelector(".grade-input-val");
+          var removeBtn = card.querySelector(".grade-btn-remove");
+
+          inputEl.value = item.value;
+
+          inputEl.addEventListener("input", function () {
+            item.value = inputEl.value;
+            updateAveragesCalculation();
+          });
+
+          removeBtn.addEventListener("click", function () {
+            if (gradesState.length <= 1) {
+              item.value = "";
+              renderGradesList();
+              updateAveragesCalculation();
+              return;
+            }
+            gradesState = gradesState.filter(function (g) {
+              return g.id !== item.id;
+            });
+            if (avgCountInput.value.trim() !== "") {
+              avgCountInput.value = String(gradesState.length);
+            }
+            renderGradesList();
+            updateAveragesCalculation();
+          });
+
+          gradesListContainer.appendChild(card);
+        });
+      }
+
+      function updateAveragesCalculation() {
+        avgValidation.classList.remove("visible");
+        avgValidation.textContent = "";
+        avgMaxScaleInput.classList.remove("input-error");
+        avgTargetScaleInput.classList.remove("input-error");
+
+        var maxScale = parseInputNumber(avgMaxScaleInput.value);
+        var targetScale = parseInputNumber(avgTargetScaleInput.value);
+
+        if (maxScale !== null && maxScale <= 0) {
+          avgMaxScaleInput.classList.add("input-error");
+          avgValidation.textContent = "La escala máxima debe ser mayor que cero.";
+          avgValidation.classList.add("visible");
+        }
+
+        if (targetScale !== null && targetScale <= 0) {
+          avgTargetScaleInput.classList.add("input-error");
+          avgValidation.textContent = "La escala configurable de destino debe ser mayor que cero.";
+          avgValidation.classList.add("visible");
+        }
+
+        var validNumbers = [];
+        var inputs = gradesListContainer.querySelectorAll(".grade-input-val");
+
+        gradesState.forEach(function (item, idx) {
+          var inp = inputs[idx];
+          if (inp) inp.classList.remove("input-error");
+          var val = parseInputNumber(item.value);
+          if (val !== null) {
+            if (val < 0) {
+              if (inp) inp.classList.add("input-error");
+              avgValidation.textContent = "Las calificaciones no pueden ser negativas.";
+              avgValidation.classList.add("visible");
+            } else {
+              validNumbers.push(val);
+            }
+          }
+        });
+
+        if (validNumbers.length === 0) {
+          avgResMean.textContent = "—";
+          avgResMean.classList.add("empty");
+          avgResCount.textContent = "Introduce al menos una calificación.";
+
+          avgResPercent.textContent = "—";
+          avgResPercent.classList.add("empty");
+          avgResPercentSub.textContent = "Requiere definir la escala máxima";
+
+          avgResScaled.textContent = "—";
+          avgResScaled.classList.add("empty");
+          avgResScaledSub.textContent = "Requiere escala máxima y escala destino";
+          return;
+        }
+
+        var sum = validNumbers.reduce(function (acc, cur) {
+          return acc + cur;
+        }, 0);
+        var mean = sum / validNumbers.length;
+
+        avgResMean.textContent = formatNumber(mean, 2);
+        avgResMean.classList.remove("empty");
+        avgResCount.textContent =
+          "Promedio de " +
+          validNumbers.length +
+          (validNumbers.length === 1 ? " calificación registrada" : " calificaciones registradas") +
+          " (Suma: " +
+          formatNumber(sum, 2) +
+          ")";
+
+        if (maxScale !== null && maxScale > 0) {
+          var pct = (mean / maxScale) * 100;
+          avgResPercent.textContent = formatNumber(pct, 2) + "%";
+          avgResPercent.classList.remove("empty");
+          avgResPercentSub.textContent = "Sobre una escala máxima de " + formatNumber(maxScale, 2);
+
+          if (targetScale !== null && targetScale > 0) {
+            var converted = (mean / maxScale) * targetScale;
+            avgResScaled.textContent = formatNumber(converted, 2) + " / " + formatNumber(targetScale, 2);
+            avgResScaled.classList.remove("empty");
+            avgResScaledSub.textContent = "Equivalente en escala sobre " + formatNumber(targetScale, 2);
+          } else {
+            avgResScaled.textContent = "—";
+            avgResScaled.classList.add("empty");
+            avgResScaledSub.textContent = "Introduce una escala de destino arriba para convertir";
+          }
+        } else {
+          avgResPercent.textContent = "—";
+          avgResPercent.classList.add("empty");
+          avgResPercentSub.textContent = "Define la escala máxima arriba para ver el %";
+
+          avgResScaled.textContent = "—";
+          avgResScaled.classList.add("empty");
+          avgResScaledSub.textContent = "Define escala máxima y escala destino";
+        }
+      }
+
+      btnAddGrade.addEventListener("click", function () {
+        gradesState.push(createEmptyGradeItem());
+        if (avgCountInput.value.trim() !== "") {
+          avgCountInput.value = String(gradesState.length);
+        }
+        renderGradesList();
+        updateAveragesCalculation();
+      });
+
+      avgCountInput.addEventListener("input", function () {
+        var desired = parseInputNumber(avgCountInput.value);
+        if (desired === null) return;
+        var count = Math.floor(desired);
+        if (count < 1) count = 1;
+        if (count > 50) count = 50;
+
+        while (gradesState.length < count) {
+          gradesState.push(createEmptyGradeItem());
+        }
+        while (gradesState.length > count) {
+          gradesState.pop();
+        }
+        renderGradesList();
+        updateAveragesCalculation();
+      });
+
+      avgMaxScaleInput.addEventListener("input", updateAveragesCalculation);
+      avgTargetScaleInput.addEventListener("input", updateAveragesCalculation);
+
+      btnClearGrades.addEventListener("click", function () {
+        avgCountInput.value = "";
+        avgMaxScaleInput.value = "";
+        avgTargetScaleInput.value = "";
+        initGrades(4);
+      });
+
+      /* ==========================================
+         4. REGLA DE TRES SIMPLE DIRECTA
+         ========================================== */
+      var ro3AInput = document.getElementById("ro3-a");
+      var ro3BInput = document.getElementById("ro3-b");
+      var ro3CInput = document.getElementById("ro3-c");
+
+      var ro3XInline = document.getElementById("ro3-x-inline");
+      var ro3ResX = document.getElementById("ro3-res-x");
+      var ro3ResFormula = document.getElementById("ro3-res-formula");
+      var ro3ResFactor = document.getElementById("ro3-res-factor");
+      var ro3Validation = document.getElementById("ro3-validation");
+      var btnClearRo3 = document.getElementById("btn-clear-ro3");
+
+      function updateRuleOfThree() {
+        var a = parseInputNumber(ro3AInput.value);
+        var b = parseInputNumber(ro3BInput.value);
+        var c = parseInputNumber(ro3CInput.value);
+
+        ro3AInput.classList.remove("input-error");
+        ro3Validation.classList.remove("visible");
+        ro3Validation.textContent = "";
+
+        if (a !== null && a === 0) {
+          ro3AInput.classList.add("input-error");
+          ro3Validation.textContent = "El valor A no puede ser cero (división entre cero no permitida).";
+          ro3Validation.classList.add("visible");
+          setRo3Empty();
+          return;
+        }
+
+        if (a !== null && b !== null && a !== 0) {
+          var factor = b / a;
+          ro3ResFactor.textContent = formatNumber(factor, 4);
+          ro3ResFactor.classList.remove("empty");
+        } else {
+          ro3ResFactor.textContent = "—";
+          ro3ResFactor.classList.add("empty");
+        }
+
+        if (a === null || b === null || c === null) {
+          ro3XInline.textContent = "—";
+          ro3XInline.classList.add("empty");
+          ro3ResX.textContent = "—";
+          ro3ResX.classList.add("empty");
+          ro3ResFormula.textContent = "Introduce los valores A, B y C para obtener X.";
+          return;
+        }
+
+        var x = (b * c) / a;
+        var formattedX = formatNumber(x, 4);
+
+        ro3XInline.textContent = formattedX;
+        ro3XInline.classList.remove("empty");
+
+        ro3ResX.textContent = formattedX;
+        ro3ResX.classList.remove("empty");
+
+        ro3ResFormula.textContent =
+          "X = (" + formatNumber(b, 2) + " × " + formatNumber(c, 2) + ") / " + formatNumber(a, 2) + " = " + formattedX;
+      }
+
+      function setRo3Empty() {
+        ro3XInline.textContent = "—";
+        ro3XInline.classList.add("empty");
+        ro3ResX.textContent = "—";
+        ro3ResX.classList.add("empty");
+        ro3ResFactor.textContent = "—";
+        ro3ResFactor.classList.add("empty");
+        ro3ResFormula.textContent = "Corrige el valor A para realizar el cálculo.";
+      }
+
+      function clearRuleOfThree() {
+        ro3AInput.value = "";
+        ro3BInput.value = "";
+        ro3CInput.value = "";
+        updateRuleOfThree();
+      }
+
+      ro3AInput.addEventListener("input", updateRuleOfThree);
+      ro3BInput.addEventListener("input", updateRuleOfThree);
+      ro3CInput.addEventListener("input", updateRuleOfThree);
+      btnClearRo3.addEventListener("click", clearRuleOfThree);
+
+      /* ==========================================
+         BORRAR TODOS LOS DATOS GLOBALMENTE
+         ========================================== */
+      var btnResetAll = document.getElementById("btn-reset-all");
+      btnResetAll.addEventListener("click", function () {
+        clearSingleCalculator();
+        evalCountInput.value = "";
+        evalTargetWeightInput.value = "";
+        evalFinalScaleInput.value = "";
+        initEvaluations(3);
+
+        avgCountInput.value = "";
+        avgMaxScaleInput.value = "";
+        avgTargetScaleInput.value = "";
+        initGrades(4);
+
+        clearRuleOfThree();
+      });
+
+      /* ==========================================
+         INICIALIZACIÓN (TODOS LOS CAMPOS VACÍOS)
+         ========================================== */
+      initEvaluations(3);
+      initGrades(4);
+      updateSingleCalculator();
+      updateRuleOfThree();
+    })();
+  </script>
+</body>
+</html>
