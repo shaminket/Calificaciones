@@ -3,29 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shaminket — Calculadora Académica y Matemática</title>
+  <title>Encardomy — Calculadora Académica y Matemática</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-page: #F7F7F5;
-      --bg-surface: #FFFFFF;
-      --bg-subtle: #F1F1EE;
-      --border-main: #D8D8D2;
-      --border-strong: #1C1C1A;
-      --text-primary: #141413;
-      --text-secondary: #5C5C57;
-      --text-muted: #8E8E88;
-      --accent: #141413;
-      --status-ok-bg: #EBF5EE;
-      --status-ok-border: #B7DEC2;
-      --status-ok-text: #1B5E32;
-      --status-warn-bg: #FEF6E7;
-      --status-warn-border: #F2D29B;
+      /* Paleta Oficial Encardomy */
+      --enc-blue: #207FF9;        /* Azul Eléctrico: Principal / Botones / Enlaces / CTA */
+      --enc-blue-hover: #1668D4;  /* Azul Eléctrico estado hover plano */
+      --enc-blue-soft: #EBF3FE;   /* Azul claro plano para destacados */
+      --enc-navy: #12396A;        /* Azul Marino: Títulos / Encabezados / Fondos oscuros */
+      --enc-navy-dark: #0A1E3C;   /* Azul Marino profundo */
+      --enc-white: #FFFFFF;       /* Blanco Puro: Fondo principal / Espacios negativos */
+      --enc-mint: #21C98D;        /* Verde Menta: Éxito / Confirmaciones / Garantías */
+      --enc-mint-soft: #E8F9F3;   /* Fondo plano Verde Menta suave */
+      --enc-mint-border: #8CE3C4; /* Borde Verde Menta */
+      --enc-mint-text: #0E6B4A;   /* Texto sobre Verde Menta suave */
+      --enc-graphite: #40464F;    /* Gris Grafito: Texto / Iconos / Elementos secundarios */
+      --enc-muted: #767E8A;       /* Gris medio para placeholders */
+      --enc-light: #EEF2F7;       /* Gris Claro: Fondos suaves / Tarjetas */
+      --enc-border: #D5DFEC;      /* Borde plano armónico con #EEF2F7 */
+
+      /* Estados de validación planos */
+      --status-warn-bg: #FFF8EB;
+      --status-warn-border: #F5D491;
       --status-warn-text: #8A5300;
       --status-err-bg: #FDECEC;
       --status-err-border: #F5BABA;
       --status-err-text: #9E1C1C;
-      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      /* Tipografías Oficiales Encardomy */
+      --font-heading: 'Sora', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'Sora', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
     * {
@@ -35,70 +46,137 @@
     }
 
     body {
-      background-color: var(--bg-page);
-      color: var(--text-primary);
+      background-color: var(--enc-light);
+      color: var(--enc-graphite);
       font-family: var(--font-sans);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 48px;
+      padding-bottom: 56px;
     }
 
-    /* Header */
+    /* Patrón decorativo plano 2D de puntos/cruces estilo manual Encardomy */
+    .top-brand-strip {
+      height: 4px;
+      background-color: var(--enc-blue);
+      display: flex;
+    }
+
+    .top-brand-strip::after {
+      content: "";
+      width: 25%;
+      height: 100%;
+      background-color: var(--enc-mint);
+      margin-left: auto;
+    }
+
+    /* Header Encardomy */
     .site-header {
-      background-color: var(--bg-surface);
-      border-bottom: 1px solid var(--border-main);
+      background-color: var(--enc-white);
+      border-bottom: 2px solid var(--enc-border);
       padding: 20px 24px;
     }
 
     .header-inner {
-      max-width: 1120px;
+      max-width: 1140px;
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 20px;
     }
 
-    .brand {
+    .brand-block {
       display: flex;
-      align-items: baseline;
-      gap: 12px;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .isotipo-svg {
+      width: 48px;
+      height: 52px;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .brand-text-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .brand-name {
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-primary);
+      font-family: var(--font-heading);
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--enc-navy-dark);
+      line-height: 1.1;
     }
 
-    .brand-tag {
-      font-size: 0.8125rem;
-      color: var(--text-secondary);
-      border-left: 1px solid var(--border-main);
-      padding-left: 12px;
+    .brand-sub-services {
+      font-family: var(--font-heading);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--enc-navy);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .brand-sub-services .dot-mint {
+      color: var(--enc-mint);
+      font-weight: 800;
+    }
+
+    .brand-pill-slogan {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--enc-border);
+      background-color: var(--enc-white);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--enc-blue);
+    }
+
+    .brand-pill-slogan .sep {
+      color: var(--enc-border);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     /* Navigation / View Switcher */
     .nav-bar {
-      background-color: var(--bg-surface);
-      border-bottom: 1px solid var(--border-main);
+      background-color: var(--enc-navy);
+      border-bottom: 2px solid var(--enc-navy-dark);
     }
 
     .nav-inner {
-      max-width: 1120px;
+      max-width: 1140px;
       margin: 0 auto;
       padding: 0 24px;
       display: flex;
-      gap: 4px;
+      gap: 6px;
       overflow-x: auto;
     }
 
@@ -106,29 +184,44 @@
       appearance: none;
       background: transparent;
       border: none;
-      border-bottom: 2px solid transparent;
-      padding: 12px 16px;
-      font-family: var(--font-sans);
-      font-size: 0.875rem;
+      border-bottom: 3px solid transparent;
+      padding: 13px 16px;
+      font-family: var(--font-heading);
+      font-size: 0.8125rem;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: #C5D4E8;
       cursor: pointer;
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-tab svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      flex-shrink: 0;
     }
 
     .nav-tab:hover {
-      color: var(--text-primary);
-      background-color: var(--bg-subtle);
+      color: var(--enc-white);
+      background-color: rgba(255, 255, 255, 0.06);
     }
 
     .nav-tab.active {
-      color: var(--text-primary);
-      border-bottom-color: var(--border-strong);
+      color: var(--enc-white);
+      border-bottom-color: var(--enc-mint);
+      background-color: var(--enc-navy-dark);
     }
 
     /* Layout Container */
     .main-container {
-      max-width: 1120px;
+      max-width: 1140px;
       margin: 28px auto 0;
       padding: 0 24px;
       display: flex;
@@ -136,10 +229,11 @@
       gap: 28px;
     }
 
-    /* Section Card (Strictly 2D, no shadows, flat borders) */
+    /* Section Card (Diseño estrictamente 2D plano, bordes limpios, esquinas suaves estilo Encardomy) */
     .module-card {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-main);
+      background-color: var(--enc-white);
+      border: 2px solid var(--enc-border);
+      border-radius: 12px;
       padding: 24px;
     }
 
@@ -153,35 +247,73 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-main);
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--enc-light);
       margin-bottom: 20px;
     }
 
     .module-title-group {
       display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .module-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background-color: var(--enc-light);
+      border: 2px solid var(--enc-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--enc-navy);
+    }
+
+    .module-icon-box svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--enc-navy);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .module-icon-box .accent-stroke {
+      stroke: var(--enc-mint);
+    }
+
+    .module-icon-box .blue-stroke {
+      stroke: var(--enc-blue);
+    }
+
+    .module-title-text {
+      display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
 
     .module-step {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-secondary);
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--enc-blue);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
     }
 
     .module-title {
-      font-size: 1.125rem;
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
       font-weight: 700;
-      color: var(--text-primary);
+      color: var(--enc-navy);
     }
 
     .module-desc {
       font-size: 0.875rem;
-      color: var(--text-secondary);
+      color: var(--enc-graphite);
     }
 
     .module-controls {
@@ -191,12 +323,13 @@
       gap: 8px;
     }
 
-    /* Buttons (2D Flat) */
+    /* Buttons (2D Flat Encardomy) */
     .btn {
       appearance: none;
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-main);
-      color: var(--text-primary);
+      background-color: var(--enc-white);
+      border: 2px solid var(--enc-border);
+      border-radius: 8px;
+      color: var(--enc-navy);
       font-family: var(--font-sans);
       font-size: 0.8125rem;
       font-weight: 600;
@@ -209,27 +342,40 @@
       line-height: 1.2;
     }
 
+    .btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
     .btn:hover {
-      border-color: var(--border-strong);
-      background-color: var(--bg-subtle);
+      border-color: var(--enc-blue);
+      color: var(--enc-blue);
+      background-color: var(--enc-light);
     }
 
     .btn-primary {
-      background-color: var(--accent);
-      border-color: var(--accent);
-      color: #FFFFFF;
+      background-color: var(--enc-blue);
+      border-color: var(--enc-blue);
+      color: var(--enc-white);
     }
 
     .btn-primary:hover {
-      background-color: #333330;
-      border-color: #333330;
+      background-color: var(--enc-blue-hover);
+      border-color: var(--enc-blue-hover);
+      color: var(--enc-white);
     }
 
     .btn-icon {
       padding: 8px 10px;
-      color: var(--text-secondary);
-      font-family: var(--font-mono);
-      font-size: 0.8125rem;
+      color: var(--enc-graphite);
+      font-family: var(--font-heading);
+      font-size: 0.875rem;
+      border-radius: 8px;
     }
 
     .btn-icon:hover {
@@ -246,37 +392,41 @@
     }
 
     .field-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-secondary);
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--enc-navy);
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
     }
 
     .input-control {
       width: 100%;
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-main);
-      color: var(--text-primary);
+      background-color: var(--enc-white);
+      border: 2px solid var(--enc-border);
+      border-radius: 8px;
+      color: var(--enc-navy-dark);
       font-family: var(--font-sans);
       font-size: 0.9375rem;
+      font-weight: 500;
       padding: 9px 12px;
       outline: none;
-      border-radius: 0;
     }
 
     .input-control.mono {
       font-family: var(--font-mono);
+      font-weight: 600;
     }
 
     .input-control::placeholder {
-      color: var(--text-muted);
+      color: var(--enc-muted);
+      font-weight: 400;
       opacity: 1;
     }
 
     .input-control:focus {
-      border-color: var(--border-strong);
-      background-color: #FAFAFA;
+      border-color: var(--enc-blue);
+      background-color: var(--enc-white);
     }
 
     .input-control.input-error {
@@ -284,19 +434,39 @@
       background-color: var(--status-err-bg);
     }
 
-    /* Formula Note */
+    /* Formula Bar */
     .formula-bar {
-      background-color: var(--bg-subtle);
-      border: 1px solid var(--border-main);
+      background-color: var(--enc-light);
+      border: 1px solid var(--enc-border);
+      border-left: 4px solid var(--enc-blue);
+      border-radius: 6px;
       padding: 10px 14px;
-      font-family: var(--font-mono);
+      font-family: var(--font-sans);
       font-size: 0.8125rem;
-      color: var(--text-secondary);
+      font-weight: 500;
+      color: var(--enc-navy);
       margin-bottom: 20px;
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       justify-content: space-between;
       gap: 8px;
+    }
+
+    .formula-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--enc-mint-text);
+      background-color: var(--enc-mint-soft);
+      border: 1px solid var(--enc-mint-border);
+      padding: 3px 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     /* Single Calculation Grid */
@@ -310,13 +480,14 @@
     /* Results Display Boxes */
     .result-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       gap: 16px;
     }
 
     .result-box {
-      background-color: var(--bg-subtle);
-      border: 1px solid var(--border-main);
+      background-color: var(--enc-light);
+      border: 2px solid var(--enc-border);
+      border-radius: 10px;
       padding: 16px;
       display: flex;
       flex-direction: column;
@@ -325,46 +496,52 @@
     }
 
     .result-box.highlight {
-      border-color: var(--border-strong);
-      background-color: var(--bg-surface);
+      border-color: var(--enc-blue);
+      background-color: var(--enc-blue-soft);
     }
 
     .result-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-secondary);
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--enc-navy);
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
 
     .result-value {
-      font-family: var(--font-mono);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text-primary);
+      font-family: var(--font-heading);
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--enc-navy-dark);
       word-break: break-all;
     }
 
+    .result-box.highlight .result-value:not(.empty) {
+      color: var(--enc-blue);
+    }
+
     .result-value.empty {
-      color: var(--text-muted);
-      font-weight: 400;
+      color: var(--enc-muted);
+      font-weight: 600;
     }
 
     .result-sub {
       font-size: 0.8125rem;
-      color: var(--text-secondary);
+      color: var(--enc-graphite);
       min-height: 1.25em;
     }
 
     /* Validation Notice */
     .validation-msg {
-      margin-top: 12px;
-      padding: 10px 12px;
-      border: 1px solid var(--status-err-border);
+      margin-top: 14px;
+      padding: 10px 14px;
+      border: 2px solid var(--status-err-border);
+      border-radius: 8px;
       background-color: var(--status-err-bg);
       color: var(--status-err-text);
       font-size: 0.8125rem;
-      font-weight: 500;
+      font-weight: 600;
       display: none;
     }
 
@@ -374,21 +551,22 @@
 
     .status-banner {
       margin-top: 16px;
-      padding: 10px 14px;
-      border: 1px solid var(--border-main);
-      background-color: var(--bg-subtle);
-      color: var(--text-secondary);
+      padding: 12px 16px;
+      border: 2px solid var(--enc-border);
+      border-radius: 8px;
+      background-color: var(--enc-light);
+      color: var(--enc-navy);
       font-size: 0.8125rem;
+      font-weight: 600;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
     }
 
     .status-banner.status-ok {
-      background-color: var(--status-ok-bg);
-      border-color: var(--status-ok-border);
-      color: var(--status-ok-text);
+      background-color: var(--enc-mint-soft);
+      border-color: var(--enc-mint);
+      color: var(--enc-mint-text);
     }
 
     .status-banner.status-warn {
@@ -403,8 +581,9 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
       padding: 16px;
-      background-color: var(--bg-subtle);
-      border: 1px solid var(--border-main);
+      background-color: var(--enc-light);
+      border: 2px solid var(--enc-border);
+      border-radius: 10px;
       margin-bottom: 20px;
     }
 
@@ -412,22 +591,27 @@
       display: grid;
       grid-template-columns: 2fr 1.1fr 1.1fr 1.1fr 1.1fr 1.1fr 44px;
       gap: 10px;
-      padding: 8px 12px;
-      border-top: 1px solid var(--border-main);
-      border-bottom: 1px solid var(--border-main);
-      background-color: var(--bg-subtle);
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-secondary);
+      padding: 10px 12px;
+      border: 2px solid var(--enc-navy);
+      border-radius: 8px 8px 0 0;
+      background-color: var(--enc-navy);
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--enc-white);
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
     }
 
     .eval-rows-container {
       display: flex;
       flex-direction: column;
-      border-bottom: 1px solid var(--border-main);
+      border-left: 2px solid var(--enc-border);
+      border-right: 2px solid var(--enc-border);
+      border-bottom: 2px solid var(--enc-border);
+      border-radius: 0 0 8px 8px;
       margin-bottom: 20px;
+      overflow: hidden;
     }
 
     .eval-row {
@@ -435,9 +619,13 @@
       grid-template-columns: 2fr 1.1fr 1.1fr 1.1fr 1.1fr 1.1fr 44px;
       gap: 10px;
       padding: 12px;
-      border-bottom: 1px solid var(--border-main);
+      border-bottom: 1px solid var(--enc-border);
       align-items: center;
-      background-color: var(--bg-surface);
+      background-color: var(--enc-white);
+    }
+
+    .eval-row:nth-child(even) {
+      background-color: #F9FBFD;
     }
 
     .eval-row:last-child {
@@ -445,29 +633,40 @@
     }
 
     .eval-cell-output {
-      background-color: var(--bg-subtle);
-      border: 1px solid var(--border-main);
+      background-color: var(--enc-light);
+      border: 2px solid var(--enc-border);
+      border-radius: 8px;
       padding: 9px 10px;
       font-family: var(--font-mono);
       font-size: 0.875rem;
-      color: var(--text-primary);
+      font-weight: 700;
+      color: var(--enc-navy);
       text-align: right;
-      min-height: 39px;
+      min-height: 41px;
       display: flex;
       align-items: center;
       justify-content: flex-end;
     }
 
+    .eval-cell-output.eval-out-contrib:not(.empty) {
+      border-color: var(--enc-mint);
+      background-color: var(--enc-mint-soft);
+      color: var(--enc-mint-text);
+    }
+
     .eval-cell-output.empty {
-      color: var(--text-muted);
+      color: var(--enc-muted);
+      font-weight: 500;
     }
 
     .eval-row-error {
       grid-column: 1 / -1;
       font-size: 0.75rem;
+      font-weight: 600;
       color: var(--status-err-text);
       background-color: var(--status-err-bg);
       border: 1px solid var(--status-err-border);
+      border-radius: 6px;
       padding: 6px 10px;
       display: none;
     }
@@ -478,9 +677,10 @@
 
     .mobile-label {
       display: none;
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--text-secondary);
+      font-family: var(--font-heading);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--enc-navy);
       text-transform: uppercase;
       margin-bottom: 4px;
     }
@@ -496,10 +696,11 @@
     .grade-item {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      padding: 12px;
-      border: 1px solid var(--border-main);
-      background-color: var(--bg-surface);
+      gap: 8px;
+      padding: 14px;
+      border: 2px solid var(--enc-border);
+      border-radius: 10px;
+      background-color: var(--enc-white);
     }
 
     .grade-item-top {
@@ -510,10 +711,10 @@
     }
 
     .grade-index {
-      font-family: var(--font-mono);
+      font-family: var(--font-heading);
       font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-secondary);
+      font-weight: 700;
+      color: var(--enc-navy);
       text-transform: uppercase;
     }
 
@@ -530,9 +731,10 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-      padding: 16px;
-      border: 1px solid var(--border-main);
-      background-color: var(--bg-subtle);
+      padding: 18px;
+      border: 2px solid var(--enc-border);
+      border-radius: 10px;
+      background-color: var(--enc-light);
     }
 
     .ro3-connector {
@@ -540,45 +742,70 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 28px;
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      padding: 0 4px;
+      gap: 36px;
+      font-family: var(--font-heading);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--enc-blue);
+      padding: 0 6px;
     }
 
     .ro3-output-field {
       width: 100%;
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-strong);
-      color: var(--text-primary);
+      background-color: var(--enc-blue-soft);
+      border: 2px solid var(--enc-blue);
+      border-radius: 8px;
+      color: var(--enc-blue);
       font-family: var(--font-mono);
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 800;
       padding: 8px 12px;
-      min-height: 40px;
+      min-height: 41px;
       display: flex;
       align-items: center;
     }
 
     .ro3-output-field.empty {
-      color: var(--text-muted);
-      font-weight: 400;
-      border-color: var(--border-main);
+      background-color: var(--enc-white);
+      color: var(--enc-muted);
+      font-weight: 500;
+      border-color: var(--enc-border);
     }
 
-    /* Footer */
+    /* Footer Encardomy */
     .site-footer {
-      max-width: 1120px;
-      margin: 40px auto 0;
-      padding: 20px 24px 0;
-      border-top: 1px solid var(--border-main);
+      max-width: 1140px;
+      margin: 44px auto 0;
+      padding: 24px 24px 0;
+      border-top: 2px solid var(--enc-border);
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      font-size: 0.75rem;
-      color: var(--text-secondary);
+      gap: 16px;
+      font-size: 0.8125rem;
+      color: var(--enc-graphite);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--enc-navy);
+    }
+
+    .footer-tags {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--enc-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     /* Responsive adjustments */
@@ -589,6 +816,11 @@
 
       .eval-list-header {
         display: none;
+      }
+
+      .eval-rows-container {
+        border-top: 2px solid var(--enc-border);
+        border-radius: 8px;
       }
 
       .eval-row {
@@ -623,25 +855,101 @@
 </head>
 <body>
 
+  <div class="top-brand-strip" aria-hidden="true"></div>
+
   <header class="site-header">
     <div class="header-inner">
-      <div class="brand">
-        <span class="brand-name">SHAMINKET</span>
-        <span class="brand-tag">Calculadora Académica y Matemática</span>
+      <div class="brand-block">
+        <div class="brand-logo-wrap">
+          <!-- Isotipo Oficial Encardomy: Cursor Inteligente + Documento + Letra E + Esquina Verde Menta -->
+          <svg class="isotipo-svg" viewBox="0 0 64 68" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Isotipo Encardomy">
+            <!-- Cuerpo del documento en Azul Eléctrico #207FF9 -->
+            <path d="M12 6C7.58172 6 4 9.58172 4 14V48C4 52.4183 7.58172 56 12 56H35L29 44H19C15.134 44 12 40.866 12 37V21C12 17.134 15.134 14 19 14H40V22H21C19.3431 22 18 23.3431 18 25C18 26.6569 19.3431 28 21 28H38V35H21C19.3431 35 18 36.3431 18 38C18 39.6569 19.3431 41 21 41H31L46 47V18L34 6H12Z" fill="#207FF9"/>
+            <!-- Doblez superior derecho en Verde Menta #21C98D -->
+            <path d="M34 6V15C34 16.6569 35.3431 18 37 18H46L34 6Z" fill="#21C98D"/>
+            <!-- Cursor inteligente integrado formando la parte inferior derecha -->
+            <path d="M31 38L58 49L46 53L52 63L45 66L39 56L32 62L31 38Z" fill="#207FF9"/>
+          </svg>
+
+          <div class="brand-text-col">
+            <span class="brand-name">Encardomy</span>
+            <div class="brand-sub-services">
+              <span>TRABAJOS</span>
+              <span class="dot-mint">+</span>
+              <span>PROYECTOS</span>
+              <span class="dot-mint">+</span>
+              <span>PRESENTACIONES</span>
+              <span class="dot-mint">+</span>
+              <span>MÁS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="brand-pill-slogan">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#21C98D" />
+            <path d="M8 12.5L10.8 15.3L16.2 9.5" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>RÁPIDO</span>
+          <span class="sep">|</span>
+          <span>CONFIABLE</span>
+          <span class="sep">|</span>
+          <span>HECHO PARA ESTUDIANTES</span>
+        </div>
       </div>
+
       <div class="header-actions">
-        <button type="button" id="btn-reset-all" class="btn">Borrar todos los datos</button>
+        <button type="button" id="btn-reset-all" class="btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14" />
+          </svg>
+          Borrar todos los datos
+        </button>
       </div>
     </div>
   </header>
 
   <nav class="nav-bar" aria-label="Vistas de calculadora">
     <div class="nav-inner">
-      <button type="button" class="nav-tab active" data-view="all">Vista completa</button>
-      <button type="button" class="nav-tab" data-view="sec-aportacion">1. Aportación individual</button>
-      <button type="button" class="nav-tab" data-view="sec-evaluaciones">2. Calculadora de evaluaciones</button>
-      <button type="button" class="nav-tab" data-view="sec-promedios">3. Promedios</button>
-      <button type="button" class="nav-tab" data-view="sec-regla3">4. Regla de tres</button>
+      <button type="button" class="nav-tab active" data-view="all">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        </svg>
+        Vista completa
+      </button>
+      <button type="button" class="nav-tab" data-view="sec-aportacion">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="9" y1="15" x2="15" y2="15" />
+        </svg>
+        1. Aportación individual
+      </button>
+      <button type="button" class="nav-tab" data-view="sec-evaluaciones">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 11l3 3L22 4" />
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+        </svg>
+        2. Calculadora de evaluaciones
+      </button>
+      <button type="button" class="nav-tab" data-view="sec-promedios">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="12" rx="2" />
+          <line x1="12" y1="16" x2="12" y2="20" />
+          <line x1="8" y1="20" x2="16" y2="20" />
+        </svg>
+        3. Promedios
+      </button>
+      <button type="button" class="nav-tab" data-view="sec-regla3">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <polyline points="12 7 12 12 15 15" />
+        </svg>
+        4. Regla de tres
+      </button>
     </div>
   </nav>
 
@@ -651,9 +959,19 @@
     <section id="sec-aportacion" class="module-card">
       <div class="module-header">
         <div class="module-title-group">
-          <span class="module-step">Módulo 01</span>
-          <h2 class="module-title">Aportación de una Calificación al Porcentaje Total</h2>
-          <p class="module-desc">Calcula cuánto aporta una evaluación individual al porcentaje final de una materia.</p>
+          <div class="module-icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline class="accent-stroke" points="14 2 14 8 20 8" />
+              <line class="blue-stroke" x1="8" y1="13" x2="16" y2="13" />
+              <line class="blue-stroke" x1="8" y1="17" x2="13" y2="17" />
+            </svg>
+          </div>
+          <div class="module-title-text">
+            <span class="module-step">Módulo 01 · Evaluación Individual</span>
+            <h2 class="module-title">Aportación de una Calificación al Porcentaje Total</h2>
+            <p class="module-desc">Calcula cuánto aporta una evaluación individual al porcentaje final de tu materia.</p>
+          </div>
         </div>
         <div class="module-controls">
           <button type="button" id="btn-clear-single" class="btn">Limpiar sección</button>
@@ -662,7 +980,7 @@
 
       <div class="formula-bar">
         <span>Fórmula: (Calificación obtenida / Calificación máxima) × Porcentaje asignado</span>
-        <span>Cálculo instantáneo</span>
+        <span class="formula-badge">Cálculo instantáneo</span>
       </div>
 
       <div class="single-calc-grid">
@@ -705,9 +1023,18 @@
     <section id="sec-evaluaciones" class="module-card">
       <div class="module-header">
         <div class="module-title-group">
-          <span class="module-step">Módulo 02</span>
-          <h2 class="module-title">Calculadora de Evaluaciones de la Materia</h2>
-          <p class="module-desc">Agrega o elimina evaluaciones dinámicamente, define su peso y consulta el acumulado total.</p>
+          <div class="module-icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="4" y="3" width="16" height="18" rx="2" />
+              <path class="accent-stroke" d="M8 10l2 2 4-4" />
+              <line class="blue-stroke" x1="8" y1="16" x2="16" y2="16" />
+            </svg>
+          </div>
+          <div class="module-title-text">
+            <span class="module-step">Módulo 02 · Desglose de Materia</span>
+            <h2 class="module-title">Calculadora de Evaluaciones de la Materia</h2>
+            <p class="module-desc">Agrega o elimina evaluaciones dinámicamente, asigna su peso y consulta tu acumulado total.</p>
+          </div>
         </div>
         <div class="module-controls">
           <button type="button" id="btn-add-eval" class="btn btn-primary">+ Agregar evaluación</button>
@@ -721,7 +1048,7 @@
           <input type="number" id="eval-count-input" class="input-control mono" min="1" max="50" step="1" placeholder="Ej. 3" />
         </div>
         <div class="field-group">
-          <label class="field-label" for="eval-target-weight">Porcentaje total de referencia (%)</label>
+          <label class="field-label" for="eval-target-weight">Porcentaje total asignado / referencia (%)</label>
           <input type="number" id="eval-target-weight" class="input-control mono" step="any" placeholder="Ej. 100" />
         </div>
         <div class="field-group">
@@ -769,9 +1096,19 @@
     <section id="sec-promedios" class="module-card">
       <div class="module-header">
         <div class="module-title-group">
-          <span class="module-step">Módulo 03</span>
-          <h2 class="module-title">Calculadora de Promedios</h2>
-          <p class="module-desc">Calcula el promedio aritmético de varias calificaciones, su porcentaje equivalente y su conversión a otra escala.</p>
+          <div class="module-icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="12" rx="2" />
+              <polyline class="accent-stroke" points="7 12 10 9 13 11 17 7" />
+              <line class="blue-stroke" x1="12" y1="16" x2="12" y2="20" />
+              <line class="blue-stroke" x1="8" y1="20" x2="16" y2="20" />
+            </svg>
+          </div>
+          <div class="module-title-text">
+            <span class="module-step">Módulo 03 · Rendimiento General</span>
+            <h2 class="module-title">Calculadora de Promedios</h2>
+            <p class="module-desc">Calcula el promedio aritmético de varias calificaciones, su porcentaje equivalente y su conversión a otra escala.</p>
+          </div>
         </div>
         <div class="module-controls">
           <button type="button" id="btn-add-grade" class="btn btn-primary">+ Agregar calificación</button>
@@ -821,9 +1158,17 @@
     <section id="sec-regla3" class="module-card">
       <div class="module-header">
         <div class="module-title-group">
-          <span class="module-step">Módulo 04</span>
-          <h2 class="module-title">Calculadora de Regla de Tres Simple Directa</h2>
-          <p class="module-desc">Si A corresponde a B, entonces C corresponde a X.</p>
+          <div class="module-icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" />
+              <path class="accent-stroke" d="M9 12l2 2 4-4" />
+            </svg>
+          </div>
+          <div class="module-title-text">
+            <span class="module-step">Módulo 04 · Proporciones</span>
+            <h2 class="module-title">Calculadora de Regla de Tres Simple Directa</h2>
+            <p class="module-desc">Si A corresponde a B, entonces C corresponde a X.</p>
+          </div>
         </div>
         <div class="module-controls">
           <button type="button" id="btn-clear-ro3" class="btn">Limpiar regla de tres</button>
@@ -832,7 +1177,7 @@
 
       <div class="formula-bar">
         <span>Fórmula: X = (B × C) / A</span>
-        <span>Proporcionalidad directa</span>
+        <span class="formula-badge">Proporcionalidad directa</span>
       </div>
 
       <div class="ro3-container">
@@ -883,8 +1228,16 @@
   </main>
 
   <footer class="site-footer">
-    <span>SHAMINKET — Herramienta de Cálculo Académico</span>
-    <span>Diseño 2D Minimalista · Precisión en tiempo real</span>
+    <div class="footer-brand">
+      <span>Encardomy — Herramienta Académica Interactiva</span>
+    </div>
+    <div class="footer-tags">
+      <span>Rápido</span>
+      <span>·</span>
+      <span>Confiable</span>
+      <span>·</span>
+      <span>Hecho para estudiantes</span>
+    </div>
   </footer>
 
   <script>
